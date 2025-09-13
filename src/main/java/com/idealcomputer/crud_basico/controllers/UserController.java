@@ -11,6 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")//conexao com o frontend
 @RestController
 @RequestMapping(value = "/usuarios")
 public class UserController {
