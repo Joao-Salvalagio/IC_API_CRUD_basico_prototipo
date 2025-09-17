@@ -15,7 +15,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)//criando excecao de erro para email ja em uso
     public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
 
-        String errorMessage = "O e-mail fornecido já está em uso. Por favor, utilize outro e-mail.";
+        String errorMessage = "O e-mail fornecido já está em uso.\nPor favor, utilize outro e-mail.";
 
         Map<String, String> errorResponse = Map.of("message", errorMessage);
 
