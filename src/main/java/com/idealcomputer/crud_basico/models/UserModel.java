@@ -18,12 +18,6 @@ public class UserModel {
 
     public UserModel() {
     }
-    public UserModel(long id, String name, String email, String function) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.function = function;
-    }
 
     public long getId() {
         return id;
