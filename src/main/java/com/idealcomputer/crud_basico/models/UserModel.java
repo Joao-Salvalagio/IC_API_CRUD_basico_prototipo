@@ -7,13 +7,13 @@ import jakarta.persistence.*;
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "ID_USUARIO")
     private Long id;
-    @Column(name = "Nome",  nullable = false)
+    @Column(name = "Nome_USUARIO",  nullable = false)
     private String name;
-    @Column(name = "Email",  nullable = false, unique = true)
+    @Column(name = "Email_USUARIO",  nullable = false, unique = true)
     private String email;
-    @Column(name = "Funcao",  nullable = false)
+    @Column(name = "Funcao_USUARIO",  nullable = false)
     private String function;
 
     public UserModel() {

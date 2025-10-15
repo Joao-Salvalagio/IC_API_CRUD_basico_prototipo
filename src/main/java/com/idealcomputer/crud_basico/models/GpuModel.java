@@ -1,24 +1,23 @@
 package com.idealcomputer.crud_basico.models;
-
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "TB_Cpu")
-public class CpuModel {
+@Table(name = "TB_Gpu")
+public class GpuModel {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_CPU")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_GPU")
     private Long id;
-    @Column(nullable = false, name = "Nome_CPU")
+    @Column(nullable = false, name = "Nome_GPU")
     private String nome;
-    @Column(nullable = false, name = "Marca_CPU")
+    @Column(nullable = false, name = "Marca_GPU")
     private String marca;
-    @Column(nullable = false, name = "Soquete_CPU")
-    private String soquete;
-    @Column(name = "Preco_CPU")
+    @Column(name = "MemoriaVRAM_GPU")
+    private Integer memoriaVram;
+    @Column(name = "Preco_GPU")
     private Double preco;
 
-    public CpuModel() {
+    public GpuModel() {
     }
 
     public Long getId() {
@@ -45,12 +44,12 @@ public class CpuModel {
         this.marca = marca;
     }
 
-    public String getSoquete() {
-        return soquete;
+    public Integer getMemoriaVram() {
+        return memoriaVram;
     }
 
-    public void setSoquete(String soquete) {
-        this.soquete = soquete;
+    public void setMemoriaVram(Integer memoriaVram) {
+        this.memoriaVram = memoriaVram;
     }
 
     public Double getPreco() {

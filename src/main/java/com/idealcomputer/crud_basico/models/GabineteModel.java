@@ -3,22 +3,22 @@ package com.idealcomputer.crud_basico.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "TB_Cpu")
-public class CpuModel {
+@Table(name = "TB_Gabinete")
+public class GabineteModel {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_CPU")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_GABINETE")
     private Long id;
-    @Column(nullable = false, name = "Nome_CPU")
+    @Column(nullable = false, name = "Nome_GABINETE")
     private String nome;
-    @Column(nullable = false, name = "Marca_CPU")
+    @Column(nullable = false, name = "Marca_GABINETE")
     private String marca;
-    @Column(nullable = false, name = "Soquete_CPU")
-    private String soquete;
-    @Column(name = "Preco_CPU")
+    @Column(nullable = false, name = "Formatos_de_placa_mae_suportados_GABINETE")
+    private String formatosPlacaMaeSuportados;
+    @Column(name = "Preco_GABINETE")
     private Double preco;
 
-    public CpuModel() {
+    public GabineteModel() {
     }
 
     public Long getId() {
@@ -45,12 +45,12 @@ public class CpuModel {
         this.marca = marca;
     }
 
-    public String getSoquete() {
-        return soquete;
+    public String getFormatosPlacaMaeSuportados() {
+        return formatosPlacaMaeSuportados;
     }
 
-    public void setSoquete(String soquete) {
-        this.soquete = soquete;
+    public void setFormatosPlacaMaeSuportados(String formatosPlacaMaeSuportados) {
+        this.formatosPlacaMaeSuportados = formatosPlacaMaeSuportados;
     }
 
     public Double getPreco() {
