@@ -17,8 +17,18 @@ public class CpuModel {
     private String soquete;
     @Column(name = "Preco_CPU")
     private Double preco;
+    @Column(nullable = false, name = "Potencia_Recomendada_W_CPU")
+    private Integer potenciaRecomendadaW;
 
     public CpuModel() {
+    }
+
+    public Integer getPotenciaRecomendadaW() {
+        return potenciaRecomendadaW;
+    }
+
+    public void setPotenciaRecomendadaW(Integer potenciaRecomendadaW) {
+        this.potenciaRecomendadaW = potenciaRecomendadaW;
     }
 
     public Long getId() {

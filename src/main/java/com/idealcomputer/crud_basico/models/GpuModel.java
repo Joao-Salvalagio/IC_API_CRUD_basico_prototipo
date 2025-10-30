@@ -16,8 +16,18 @@ public class GpuModel {
     private Integer memoriaVram;
     @Column(name = "Preco_GPU")
     private Double preco;
+    @Column(name = "Potencia_Recomendada_W_GPU")
+    private Integer potenciaRecomendadaW;
 
     public GpuModel() {
+    }
+
+    public Integer getPotenciaRecomendadaW() {
+        return potenciaRecomendadaW;
+    }
+
+    public void setPotenciaRecomendadaW(Integer potenciaRecomendadaW) {
+        this.potenciaRecomendadaW = potenciaRecomendadaW;
     }
 
     public Long getId() {
