@@ -4,7 +4,7 @@ import com.idealcomputer.crud_basico.dto.RecommendationRequestDTO;
 import com.idealcomputer.crud_basico.dto.RecommendationResponseDTO;
 import com.idealcomputer.crud_basico.models.*;
 import com.idealcomputer.crud_basico.repositories.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor; // Importa a anotação
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class RecommendationService {
 
     private final CpuRepository cpuRepository;
@@ -24,19 +25,6 @@ public class RecommendationService {
     private final GabineteRepository gabineteRepository;
     private final RefrigeracaoRepository refrigeracaoRepository;
 
-    @Autowired
-    public RecommendationService(CpuRepository cpuRepository, PlacaMaeRepository placaMaeRepository, GpuRepository gpuRepository, MemoriaRamRepository memoriaRamRepository, ArmazenamentoRepository armazenamentoRepository, FonteRepository fonteRepository, GabineteRepository gabineteRepository, RefrigeracaoRepository refrigeracaoRepository) {
-        this.cpuRepository = cpuRepository;
-        this.placaMaeRepository = placaMaeRepository;
-        this.gpuRepository = gpuRepository;
-        this.memoriaRamRepository = memoriaRamRepository;
-        this.armazenamentoRepository = armazenamentoRepository;
-        this.fonteRepository = fonteRepository;
-        this.gabineteRepository = gabineteRepository;
-        this.refrigeracaoRepository = refrigeracaoRepository;
-    }
-
-    // Classe auxiliar interna para representar um "Kit de Plataforma"
     private static class PlatformKit {
         CpuModel cpu;
         PlacaMaeModel placaMae;
@@ -73,26 +61,21 @@ public class RecommendationService {
         List<PlatformKit> validKits = allPossibleKits.stream()
                 .filter(kit -> kit.totalCost <= platformBudget)
                 .filter(kit -> filterKitByUsage(kit, request))
+                .sorted(Comparator.comparingDouble((PlatformKit kit) -> kit.totalCost).reversed())
                 .collect(Collectors.toList());
 
         if (validKits.isEmpty()) {
             throw new RuntimeException("Não foi possível encontrar um kit (CPU, Placa-mãe, RAM) para seu orçamento. Tente um valor maior.");
         }
 
-        // --- NOVA LÓGICA DE CUSTO-BENEFÍCIO ---
-        // Se for build econômica, ordena do mais barato para o mais caro.
-        // Se for build de performance, ordena do mais caro para o mais barato.
         boolean isBudgetBuild = request.getBudget().equalsIgnoreCase("econômico") ||
                 request.getDetail().equalsIgnoreCase("Básico") ||
                 request.getDetail().equalsIgnoreCase("Office");
 
         if (isBudgetBuild) {
             validKits.sort(Comparator.comparingDouble(kit -> kit.totalCost));
-        } else {
-            validKits.sort(Comparator.comparingDouble((PlatformKit kit) -> kit.totalCost).reversed());
         }
 
-        // --- LÓGICA DE TENTATIVA E FALLBACK ---
         for (PlatformKit currentKit : validKits) {
             double remainingBudget = maxBudget - currentKit.totalCost;
 
@@ -101,7 +84,6 @@ public class RecommendationService {
                 String coolerType = isHighEndCpu(currentKit.cpu) ? "Water Cooler" : "Air Cooler";
                 selectedRefrigeracao = findCheapestCompatibleCooler(refrigeracaoRepository.findAll(), currentKit.cpu.getSoquete(), remainingBudget, coolerType);
 
-                // Fallback para Air Cooler se Water Cooler não for encontrado ou não couber
                 if (selectedRefrigeracao == null && coolerType.equals("Water Cooler")) {
                     selectedRefrigeracao = findCheapestCompatibleCooler(refrigeracaoRepository.findAll(), currentKit.cpu.getSoquete(), remainingBudget, "Air Cooler");
                 }
@@ -116,12 +98,10 @@ public class RecommendationService {
                 if (selectedGpu != null) remainingBudget -= selectedGpu.getPreco();
             }
 
-            // --- LÓGICA DE FONTE (PSU) ATUALIZADA ---
             double potenciaNecessaria = calculateRequiredWattage(currentKit.cpu, selectedGpu, maxBudget);
             FonteModel selectedFonte = findCheapestFonte(fonteRepository.findAll(), remainingBudget, potenciaNecessaria);
             if (selectedFonte != null) remainingBudget -= selectedFonte.getPreco();
 
-            // --- LÓGICA DE ARMAZENAMENTO ATUALIZADA (Prioriza NVMe) ---
             ArmazenamentoModel selectedArmazenamento = findCheapestArmazenamento(armazenamentoRepository.findAll(), remainingBudget, "SSD NVMe");
             if (selectedArmazenamento == null) {
                 selectedArmazenamento = findCheapestArmazenamento(armazenamentoRepository.findAll(), remainingBudget, "SSD SATA");
@@ -180,20 +160,15 @@ public class RecommendationService {
                 name.contains("13600K");
     }
 
-    // --- LÓGICA DE CÁLCULO DE FONTE ATUALIZADA ---
     private double calculateRequiredWattage(CpuModel cpu, GpuModel gpu, double budget) {
-        double basePower = 150; // Placa-mãe, RAM, Armazenamento, Fans
-        double cpuPower = cpu != null ? cpu.getPotenciaRecomendadaW() : 0;
-        double gpuPower = gpu != null ? gpu.getPotenciaRecomendadaW() : 0;
+        double basePower = 150;
+        double cpuPower = cpu != null ? (cpu.getPotenciaRecomendadaW() != null ? cpu.getPotenciaRecomendadaW() : 65) : 0; // Fallback de 65W
+        double gpuPower = gpu != null ? (gpu.getPotenciaRecomendadaW() != null ? gpu.getPotenciaRecomendadaW() : 0) : 0;
 
         double totalDemand = basePower + cpuPower + gpuPower;
-
-        // Regra 1: Folga de 50% para segurança e eficiência
         double safeWattage = totalDemand * 1.50;
 
-        // Regra 2: Regra de qualidade para builds caras
         if (budget > 7000) {
-            // Se for uma build "Alta" ou "Extrema", a fonte deve ter no mínimo 750W
             return Math.max(safeWattage, 750.0);
         }
         return safeWattage;

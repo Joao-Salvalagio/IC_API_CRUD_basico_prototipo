@@ -1,53 +1,37 @@
 package com.idealcomputer.crud_basico.models;
 
+import com.idealcomputer.crud_basico.enums.UserRole;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "TB_Usuarios")
-public class UserModel {
+public class UserModel implements BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_USUARIO")
     private Long id;
+
     @Column(name = "Nome_USUARIO",  nullable = false)
     private String name;
+
     @Column(name = "Email_USUARIO",  nullable = false, unique = true)
     private String email;
-    @Column(name = "Funcao_USUARIO",  nullable = false)
-    private String function;
 
-    public UserModel() {
-    }
+    @Column(name = "Senha_USUARIO", nullable = false)
+    private String password;
 
-    public long getId() {
-        return id;
-    }
+    // 2. Renomeamos "function" para "cargo" (o texto livre)
+    @Column(name = "Cargo_USUARIO",  nullable = false)
+    private String cargo; // Ex: "Cliente", "Desenvolvedor", "CEO"
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFunction() {
-        return function;
-    }
-
-    public void setFunction(String function) {
-        this.function = function;
-    }
+    // 3. Adicionamos o novo campo "funcao" (a permissão)
+    @Enumerated(EnumType.STRING) // Salva no banco como "USUARIO" ou "ADMINISTRADOR"
+    @Column(name = "Funcao_USUARIO", nullable = false)
+    private UserRole funcao; // Ex: UserRole.USUARIO, UserRole.ADMINISTRADOR
 }

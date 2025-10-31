@@ -6,32 +6,23 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class RefrigeracaoService {
+public class RefrigeracaoService extends BaseCrudService<RefrigeracaoModel, Long, RefrigeracaoRepository> {
 
     @Autowired
-    private RefrigeracaoRepository refrigeracaoRepository;
-
-    public RefrigeracaoModel findById(Long id) {
-        Optional<RefrigeracaoModel> refrigeracao = refrigeracaoRepository.findById(id);
-        return refrigeracao.orElseThrow(() -> new RuntimeException("Sistema de refrigeração não encontrado! ID: " + id));
+    public RefrigeracaoService(RefrigeracaoRepository repository) {
+        super(repository, "Refrigeração");
     }
 
-    public List<RefrigeracaoModel> findAll() {
-        return refrigeracaoRepository.findAll();
-    }
-
+    @Override
     @Transactional
-    public RefrigeracaoModel save(RefrigeracaoModel refrigeracao) {
-        return refrigeracaoRepository.save(refrigeracao);
+    public RefrigeracaoModel save(RefrigeracaoModel entity) {
+        return super.save(entity);
     }
 
+    @Override
     @Transactional
     public void deleteById(Long id) {
-        findById(id);
-        refrigeracaoRepository.deleteById(id);
+        super.deleteById(id);
     }
 }

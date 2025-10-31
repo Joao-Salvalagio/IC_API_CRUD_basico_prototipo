@@ -6,32 +6,23 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class FonteService {
+public class FonteService extends BaseCrudService<FonteModel, Long, FonteRepository> {
 
     @Autowired
-    private FonteRepository fonteRepository;
-
-    public FonteModel findById(Long id) {
-        Optional<FonteModel> fonte = fonteRepository.findById(id);
-        return fonte.orElseThrow(() -> new RuntimeException("Fonte não encontrada! ID: " + id));
+    public FonteService(FonteRepository repository) {
+        super(repository, "Fonte");
     }
 
-    public List<FonteModel> findAll() {
-        return fonteRepository.findAll();
-    }
-
+    @Override
     @Transactional
-    public FonteModel save(FonteModel fonte) {
-        return fonteRepository.save(fonte);
+    public FonteModel save(FonteModel entity) {
+        return super.save(entity);
     }
 
+    @Override
     @Transactional
     public void deleteById(Long id) {
-        findById(id);
-        fonteRepository.deleteById(id);
+        super.deleteById(id);
     }
 }

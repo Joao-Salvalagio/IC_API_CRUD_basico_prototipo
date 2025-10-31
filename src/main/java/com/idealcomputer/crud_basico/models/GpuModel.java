@@ -1,9 +1,15 @@
 package com.idealcomputer.crud_basico.models;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "TB_Gpu")
-public class GpuModel {
+public class GpuModel implements BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_GPU")
@@ -12,61 +18,10 @@ public class GpuModel {
     private String nome;
     @Column(nullable = false, name = "Marca_GPU")
     private String marca;
-    @Column(name = "MemoriaVRAM_GPU")
+    @Column(nullable = false, name = "MemoriaVRAM_GPU")
     private Integer memoriaVram;
-    @Column(name = "Preco_GPU")
+    @Column(nullable = false, name = "Preco_GPU")
     private Double preco;
-    @Column(name = "Potencia_Recomendada_W_GPU")
+    @Column(nullable = false, name = "Potencia_Recomendada_W_GPU")
     private Integer potenciaRecomendadaW;
-
-    public GpuModel() {
-    }
-
-    public Integer getPotenciaRecomendadaW() {
-        return potenciaRecomendadaW;
-    }
-
-    public void setPotenciaRecomendadaW(Integer potenciaRecomendadaW) {
-        this.potenciaRecomendadaW = potenciaRecomendadaW;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-
-    public Integer getMemoriaVram() {
-        return memoriaVram;
-    }
-
-    public void setMemoriaVram(Integer memoriaVram) {
-        this.memoriaVram = memoriaVram;
-    }
-
-    public Double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(Double preco) {
-        this.preco = preco;
-    }
 }

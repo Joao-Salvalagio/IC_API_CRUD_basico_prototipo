@@ -3,51 +3,37 @@ package com.idealcomputer.crud_basico.controllers;
 import com.idealcomputer.crud_basico.models.ArmazenamentoModel;
 import com.idealcomputer.crud_basico.services.ArmazenamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.util.List;
-
+// 1. A classe agora "estende" (herda de) nossa BaseCrudController.
+// 2. Nós especificamos os tipos genéricos:
+//    <T> -> ArmazenamentoModel (que deve implementar BaseEntity<Long>)
+//    <ID> -> Long
+//    <S> -> ArmazenamentoService
 @RestController
-@RequestMapping(value = "/api/armazenamentos") // Nova rota base
+@RequestMapping(value = "/api/armazenamentos")
 @CrossOrigin(origins = "http://localhost:5173")
-public class ArmazenamentoController {
+public class ArmazenamentoController extends BaseCrudController<ArmazenamentoModel, Long, ArmazenamentoService> {
 
+    /*
+     * 3. Este é o construtor. Graças à Injeção de Dependência por Construtor,
+     * o Spring automaticamente nos fornecerá o "ArmazenamentoService" aqui.
+     */
     @Autowired
-    private ArmazenamentoService armazenamentoService;
-
-    @GetMapping
-    public ResponseEntity<List<ArmazenamentoModel>> findAll() {
-        List<ArmazenamentoModel> list = armazenamentoService.findAll();
-        return ResponseEntity.ok().body(list);
+    public ArmazenamentoController(ArmazenamentoService service) {
+        /*
+         * 4. Aqui nós chamamos o construtor da classe "Pai" (BaseCrudController),
+         * passando o serviço que recebemos.
+         */
+        super(service);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ArmazenamentoModel> findById(@PathVariable Long id) {
-        ArmazenamentoModel armazenamento = armazenamentoService.findById(id);
-        return ResponseEntity.ok().body(armazenamento);
-    }
-
-    @PostMapping
-    public ResponseEntity<ArmazenamentoModel> create(@RequestBody ArmazenamentoModel armazenamento) {
-        ArmazenamentoModel newArmazenamento = armazenamentoService.save(armazenamento);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(newArmazenamento.getId()).toUri();
-        return ResponseEntity.created(uri).body(newArmazenamento);
-    }
-
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<ArmazenamentoModel> update(@PathVariable Long id, @RequestBody ArmazenamentoModel armazenamento) {
-        armazenamento.setId(id);
-        ArmazenamentoModel updatedArmazenamento = armazenamentoService.save(armazenamento);
-        return ResponseEntity.ok().body(updatedArmazenamento);
-    }
-
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        armazenamentoService.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
+    /*
+     * 5. E É SÓ ISSO!
+     * Todos os 5 endpoints (findAll, findById, create, update, delete)
+     * são herdados automaticamente da BaseCrudController.
+     * A classe fica 100% limpa, contendo apenas as anotações de configuração.
+     */
 }

@@ -6,32 +6,23 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class PlacaMaeService {
+public class PlacaMaeService extends BaseCrudService<PlacaMaeModel, Long, PlacaMaeRepository> {
 
     @Autowired
-    private PlacaMaeRepository placaMaeRepository;
-
-    public PlacaMaeModel findById(Long id) {
-        Optional<PlacaMaeModel> placaMae = placaMaeRepository.findById(id);
-        return placaMae.orElseThrow(() -> new RuntimeException("Placa-mãe não encontrada! ID: " + id));
+    public PlacaMaeService(PlacaMaeRepository repository) {
+        super(repository, "Placa-mãe");
     }
 
-    public List<PlacaMaeModel> findAll() {
-        return placaMaeRepository.findAll();
-    }
-
+    @Override
     @Transactional
-    public PlacaMaeModel save(PlacaMaeModel placaMae) {
-        return placaMaeRepository.save(placaMae);
+    public PlacaMaeModel save(PlacaMaeModel entity) {
+        return super.save(entity);
     }
 
+    @Override
     @Transactional
     public void deleteById(Long id) {
-        findById(id);
-        placaMaeRepository.deleteById(id);
+        super.deleteById(id);
     }
 }

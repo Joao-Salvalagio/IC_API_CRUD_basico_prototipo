@@ -6,32 +6,23 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class CpuService {
+public class CpuService extends BaseCrudService<CpuModel, Long, CpuRepository> {
 
     @Autowired
-    private CpuRepository cpuRepository;
-
-    public CpuModel findById(Long id) {
-        Optional<CpuModel> cpu = cpuRepository.findById(id);
-        return cpu.orElseThrow(() -> new RuntimeException("CPU não encontrada! ID: " + id));
+    public CpuService(CpuRepository repository) {
+        super(repository, "Processador (CPU)");
     }
 
-    public List<CpuModel> findAll() {
-        return cpuRepository.findAll();
-    }
-
+    @Override
     @Transactional
-    public CpuModel save(CpuModel cpu) {
-        return cpuRepository.save(cpu);
+    public CpuModel save(CpuModel entity) {
+        return super.save(entity);
     }
 
+    @Override
     @Transactional
     public void deleteById(Long id) {
-        findById(id);
-        cpuRepository.deleteById(id);
+        super.deleteById(id);
     }
 }

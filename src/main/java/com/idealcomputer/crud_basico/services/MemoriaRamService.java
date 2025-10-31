@@ -6,32 +6,23 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class MemoriaRamService {
+public class MemoriaRamService extends BaseCrudService<MemoriaRamModel, Long, MemoriaRamRepository> {
 
     @Autowired
-    private MemoriaRamRepository memoriaRamRepository;
-
-    public MemoriaRamModel findById(Long id) {
-        Optional<MemoriaRamModel> memoriaRam = memoriaRamRepository.findById(id);
-        return memoriaRam.orElseThrow(() -> new RuntimeException("Memória RAM não encontrada! ID: " + id));
+    public MemoriaRamService(MemoriaRamRepository repository) {
+        super(repository, "Memória RAM");
     }
 
-    public List<MemoriaRamModel> findAll() {
-        return memoriaRamRepository.findAll();
-    }
-
+    @Override
     @Transactional
-    public MemoriaRamModel save(MemoriaRamModel memoriaRam) {
-        return memoriaRamRepository.save(memoriaRam);
+    public MemoriaRamModel save(MemoriaRamModel entity) {
+        return super.save(entity);
     }
 
+    @Override
     @Transactional
     public void deleteById(Long id) {
-        findById(id);
-        memoriaRamRepository.deleteById(id);
+        super.deleteById(id);
     }
 }

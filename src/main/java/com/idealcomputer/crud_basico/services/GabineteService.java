@@ -6,32 +6,23 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class GabineteService {
+public class GabineteService extends BaseCrudService<GabineteModel, Long, GabineteRepository> {
 
     @Autowired
-    private GabineteRepository gabineteRepository;
-
-    public GabineteModel findById(Long id) {
-        Optional<GabineteModel> gabinete = gabineteRepository.findById(id);
-        return gabinete.orElseThrow(() -> new RuntimeException("Gabinete não encontrado! ID: " + id));
+    public GabineteService(GabineteRepository repository) {
+        super(repository, "Gabinete");
     }
 
-    public List<GabineteModel> findAll() {
-        return gabineteRepository.findAll();
-    }
-
+    @Override
     @Transactional
-    public GabineteModel save(GabineteModel gabinete) {
-        return gabineteRepository.save(gabinete);
+    public GabineteModel save(GabineteModel entity) {
+        return super.save(entity);
     }
 
+    @Override
     @Transactional
     public void deleteById(Long id) {
-        findById(id);
-        gabineteRepository.deleteById(id);
+        super.deleteById(id);
     }
 }

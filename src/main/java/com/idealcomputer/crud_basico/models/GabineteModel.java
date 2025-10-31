@@ -1,10 +1,16 @@
 package com.idealcomputer.crud_basico.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "TB_Gabinete")
-public class GabineteModel {
+public class GabineteModel implements BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_GABINETE")
@@ -15,49 +21,6 @@ public class GabineteModel {
     private String marca;
     @Column(nullable = false, name = "Formatos_de_placa_mae_suportados_GABINETE")
     private String formatosPlacaMaeSuportados;
-    @Column(name = "Preco_GABINETE")
+    @Column(nullable = false, name = "Preco_GABINETE")
     private Double preco;
-
-    public GabineteModel() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-
-    public String getFormatosPlacaMaeSuportados() {
-        return formatosPlacaMaeSuportados;
-    }
-
-    public void setFormatosPlacaMaeSuportados(String formatosPlacaMaeSuportados) {
-        this.formatosPlacaMaeSuportados = formatosPlacaMaeSuportados;
-    }
-
-    public Double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(Double preco) {
-        this.preco = preco;
-    }
 }

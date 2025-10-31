@@ -6,32 +6,23 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class GpuService {
+public class GpuService extends BaseCrudService<GpuModel, Long, GpuRepository> {
 
     @Autowired
-    private GpuRepository gpuRepository;
-
-    public GpuModel findById(Long id) {
-        Optional<GpuModel> gpu = gpuRepository.findById(id);
-        return gpu.orElseThrow(() -> new RuntimeException("GPU não encontrada! ID: " + id));
+    public GpuService(GpuRepository repository) {
+        super(repository, "GPU");
     }
 
-    public List<GpuModel> findAll() {
-        return gpuRepository.findAll();
-    }
-
+    @Override
     @Transactional
-    public GpuModel save(GpuModel gpu) {
-        return gpuRepository.save(gpu);
+    public GpuModel save(GpuModel entity) {
+        return super.save(entity);
     }
 
+    @Override
     @Transactional
     public void deleteById(Long id) {
-        findById(id);
-        gpuRepository.deleteById(id);
+        super.deleteById(id);
     }
 }

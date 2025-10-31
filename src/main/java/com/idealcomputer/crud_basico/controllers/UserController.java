@@ -2,7 +2,6 @@ package com.idealcomputer.crud_basico.controllers;
 
 import com.idealcomputer.crud_basico.models.UserModel;
 import com.idealcomputer.crud_basico.services.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,53 +10,53 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")//conexao com o frontend
 @RestController
 @RequestMapping(value = "/usuarios")
-public class UserController {
+@CrossOrigin(origins = "http://localhost:5173")
+public class UserController { // NÃO estende mais BaseCrudController
+
+    // 1. Injetamos o UserService (que agora é independente)
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public UserController(UserService service) {
+        this.userService = service;
+    }
 
-    //endpoint para buscar todos os usuarios (read)
-    //mapeado para requisicao do GET /usuarios
+    /*
+     * 2. Re-implementamos todos os 5 endpoints CRUD
+     * que antes eram herdados.
+     */
+
     @GetMapping
-    public ResponseEntity<List<UserModel>> findAll(){
-        List<UserModel> list = userService.findAll();
-        return ResponseEntity.ok().body(list);
+    public ResponseEntity<List<UserModel>> findAll() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
-    //endpoint para buscar usuario por ID (busca especifica/read)
-    //mapeado para requisicao do GET /usuarios{id}
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserModel> findById(@PathVariable Long id){
-        UserModel user = userService.findById(id);
-        return ResponseEntity.ok().body(user);
+    public ResponseEntity<UserModel> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findById(id));
     }
 
-    //endpoint para criar um novo usuario (create)
-    //mapeado para requisicao POST /usuarios
     @PostMapping
-    public ResponseEntity<UserModel> create(@RequestBody UserModel user){
+    public ResponseEntity<UserModel> create(@RequestBody UserModel user) {
+        // 3. O método "save" do userService agora irá CRIPTOGRAFAR a senha
         UserModel newUser = userService.save(user);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(newUser.getId()).toUri();
         return ResponseEntity.created(uri).body(newUser);
     }
 
-    //endpoint para atualizar um usuario existente (update)
-    //mapeado para requisicao PUT /usuarios{id}
     @PutMapping(value = "/{id}")
-    public ResponseEntity<UserModel> update(@PathVariable Long id, @RequestBody UserModel user){
-        user.setId(id); //garante que estamos atualizando o usuario com o ID correto
+    public ResponseEntity<UserModel> update(@PathVariable Long id, @RequestBody UserModel user) {
+        user.setId(id);
+        // 4. O "save" aqui também vai criptografar a senha caso ela seja alterada.
         UserModel updatedUser = userService.save(user);
-        return ResponseEntity.ok().body(updatedUser);
+        return ResponseEntity.ok(updatedUser);
     }
 
-    //endpoint para deletar um usuario (delete)
-    //mapeado para a requisicao DELETE /usuarios{id}
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
