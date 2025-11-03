@@ -1,6 +1,6 @@
 package com.idealcomputer.crud_basico.security;
 
-import com.idealcomputer.crud_basico.enums.UserRole; // Verifique o import!
+import com.idealcomputer.crud_basico.enums.UserRole; // Verifique o import
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +40,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+
+        // --- MUDANÇA AQUI ---
+        // Voltamos a permitir apenas a porta 5173, como você preferiu.
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
@@ -62,7 +66,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/recommendations/generate").permitAll()
 
-                        // CORREÇÃO: Trocado de .hasRole() para .hasAuthority()
                         .requestMatchers("/usuarios/**").hasAuthority(UserRole.ADMINISTRADOR.name())
                         .requestMatchers("/api/cpus/**").hasAuthority(UserRole.ADMINISTRADOR.name())
                         .requestMatchers("/api/placas-mae/**").hasAuthority(UserRole.ADMINISTRADOR.name())

@@ -1,7 +1,7 @@
 package com.idealcomputer.crud_basico.security;
 
 import com.idealcomputer.crud_basico.models.UserModel;
-import com.idealcomputer.crud_basico.enums.UserRole; // Verifique o import!
+import com.idealcomputer.crud_basico.enums.UserRole; // Import corrigido
 import com.idealcomputer.crud_basico.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,7 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         UserModel userModel = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com o e-mail: " + email));
 
-        // CORREÇÃO: Cria a autoridade com o nome EXATO do Enum
+        // CORREÇÃO: Cria a autoridade com o nome EXATO do Enum (ex: "ADMINISTRADOR")
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userModel.getFuncao().name());
 
         return new User(

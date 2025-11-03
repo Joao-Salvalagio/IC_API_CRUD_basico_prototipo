@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/gabinetes")
-@CrossOrigin(origins = "http://localhost:5173")
 public class GabineteController extends BaseCrudController<GabineteModel, Long, GabineteService> {
 
     @Autowired

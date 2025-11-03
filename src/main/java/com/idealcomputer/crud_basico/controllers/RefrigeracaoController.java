@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/refrigeracoes")
-@CrossOrigin(origins = "http://localhost:5173")
 public class RefrigeracaoController extends BaseCrudController<RefrigeracaoModel, Long, RefrigeracaoService> {
 
     @Autowired

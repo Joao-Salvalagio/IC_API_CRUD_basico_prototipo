@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/placas-mae")
-@CrossOrigin(origins = "http://localhost:5173")
 public class PlacaMaeController extends BaseCrudController<PlacaMaeModel, Long, PlacaMaeService> {
 
     @Autowired

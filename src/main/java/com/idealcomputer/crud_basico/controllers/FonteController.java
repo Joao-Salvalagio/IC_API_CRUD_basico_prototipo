@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/fontes")
-@CrossOrigin(origins = "http://localhost:5173")
 public class FonteController extends BaseCrudController<FonteModel, Long, FonteService> {
 
     @Autowired

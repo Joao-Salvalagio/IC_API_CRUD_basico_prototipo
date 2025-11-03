@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/cpus")
-@CrossOrigin(origins = "http://localhost:5173")
 public class CpuController extends BaseCrudController<CpuModel, Long, CpuService> {
 
     @Autowired

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/gpus")
-@CrossOrigin(origins = "http://localhost:5173")
 public class GpuController extends BaseCrudController<GpuModel, Long, GpuService> {
 
     @Autowired

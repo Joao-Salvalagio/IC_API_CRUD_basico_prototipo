@@ -30,8 +30,7 @@ public class UserModel implements BaseEntity<Long>{
     @Column(name = "Cargo_USUARIO",  nullable = false)
     private String cargo; // Ex: "Cliente", "Desenvolvedor", "CEO"
 
-    // 3. Adicionamos o novo campo "funcao" (a permissão)
-    @Enumerated(EnumType.STRING) // Salva no banco como "USUARIO" ou "ADMINISTRADOR"
+    @Enumerated(EnumType.STRING)
     @Column(name = "Funcao_USUARIO", nullable = false)
-    private UserRole funcao; // Ex: UserRole.USUARIO, UserRole.ADMINISTRADOR
+    private UserRole funcao;
 }

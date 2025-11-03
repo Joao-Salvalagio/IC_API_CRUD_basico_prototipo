@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/memorias-ram")
-@CrossOrigin(origins = "http://localhost:5173")
 public class MemoriaRamController extends BaseCrudController<MemoriaRamModel, Long, MemoriaRamService> {
 
     @Autowired

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 //    <S> -> ArmazenamentoService
 @RestController
 @RequestMapping(value = "/api/armazenamentos")
-@CrossOrigin(origins = "http://localhost:5173")
 public class ArmazenamentoController extends BaseCrudController<ArmazenamentoModel, Long, ArmazenamentoService> {
 
     /*

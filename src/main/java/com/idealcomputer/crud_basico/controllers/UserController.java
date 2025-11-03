@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/usuarios")
-@CrossOrigin(origins = "http://localhost:5173")
 public class UserController { // NÃO estende mais BaseCrudController
 
     // 1. Injetamos o UserService (que agora é independente)
